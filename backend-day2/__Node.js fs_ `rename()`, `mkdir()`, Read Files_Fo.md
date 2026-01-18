@@ -163,9 +163,8 @@ Pro tip: fs.promises use karo everywhere!
 ```
 
 **Practice:** Create full project folder → users.json → uploads/user1/ → Backend ready! 🎯
-<span style="display:none">[^1][^10][^2][^3][^4][^5][^6][^7][^8][^9]</span>
+<!-- <span style="display:none">[^1][^10][^2][^3][^4][^5][^6][^7][^8][^9]</span>
 
-<div align="center">⁂</div>
 
 [^1]: https://dev.to/emkay860/read-and-rename-all-files-in-a-directory-with-nodejs-2dfo
 
@@ -185,5 +184,7 @@ Pro tip: fs.promises use karo everywhere!
 
 [^9]: https://www.youtube.com/watch?v=OYuWDe_LSbE
 
-[^10]: https://www.w3schools.com/nodejs/nodejs_filesystem.asp
+[^10]: https://www.w3schools.com/nodejs/nodejs_filesystem.asp -->
 
+
+<div align="center">⁂</div>
