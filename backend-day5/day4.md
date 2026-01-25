@@ -1,4 +1,4 @@
-<!-- todays topics  -->
+<!-- todays topics 
 # Form handling and working with the forms 
 handle backend process of forms and making ssure the data coming from any frontend lib, fw, templating engies , we still handle it at the same time 
 
@@ -71,11 +71,11 @@ or yeh process bhot jada tang krega pareshan krne vala hai.. esa keo hota hai ke
 > or now jab ap server say connect ho jitna time ho time hai session , so yehi story hai.. 
 > session kiya hai jab tak ap login ho or app use kr rahe ho ho connect vo situation ho session hai jab app relogin krte ho to new session banega, login say logout tak 
 
-> Note--> jb bhi ap login krte ho to data as normal text nhi jaata server tak vo jada hai as blobs or yeh unreadable hota hai means kuj random strings and numbers etc hota hai.. or blob main sari info hoti hai related to us or that's not readable... 
+> Note-- jb bhi ap login krte ho to data as normal text nhi jaata server tak vo jada hai as blobs or yeh unreadable hota hai means kuj random strings and numbers etc hota hai.. or blob main sari info hoti hai related to us or that's not readable... 
 
 > now server koi us blob ko handle krna pardeda as readable how to do we add these line , yeh middlewares hai 
 
 ```js 
     app.use(express.json())
     app.use(express.urlencoded({extended: true}))
-```
+``` -->
