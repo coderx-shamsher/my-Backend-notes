@@ -54,7 +54,7 @@ app.get('/index', function(req, res){
 - **run this command** 
 ``` bash
 
-npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch
+npx @tailwindcss/cli -i ./public/src/input.css -o ./public/src/output.css --watch
 
 ```
 
