@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+      <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body>
+     <div class="main w-full min-h-screen bg-zinc-900">
+    <div class="form p-12  ">
+      <form action="/edit" method="post">
+
+        <div class="previous_name">
+          <input class=" block w-2/3 bg-gray-500 text-zinc-400 py-2.5 rounded-2xl px-4 outline-none mb-4" type="text" placeholder="previous file name " name="previous" value="<%=filename %>"  disabled="true" >
+        </div>
+
+        <div class="editname flex text-stone-50">
+          <input class=" block w-2/3 bg-gray-500  text-white py-2.5 rounded-2xl px-3.5 outline-none" type="text" placeholder="New filename " name="newfilename">
+
+           <div class="submitbtn flex justify-end mt-3.5 absolute top-25  left-144 right-10">
+               <input class="bg-sky-600 text-white w-[10rem] rounded-2xl px-2 py-2 " type="submit" value="Update FileName">
+          
+             </div>
+            
+            </div>
+
+
+           <div class="absolute left-171 top-12 mt-0.5 ">
+              <button class="bg-sky-600 text-white px-2 py-2 rounded-2xl    ">
+               <a href="/"> Go <B></B>ack to Home </a>
+                </button> 
+            
+            </div>
+
+        
+
+      </form>
+  </div>
+</body>
+</html>

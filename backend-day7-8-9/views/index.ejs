@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <!-- <link rel="stylesheet" href="/style.css"> -->
+  <!-- <link rel="stylesheet" href="/src/output.css"> -->
+  <!-- <link rel="stylesheet" href="/output.css"> -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body>
+  <div class="main w-full min-h-screen bg-zinc-900">
+    <div class="form p-12 border-2 border-amber-800">
+      <!-- // after setup the fs module and use the dynamic file handling with ejs form the express js app yaha pr action="/create" method="post"-->
+       <!-- now go and create a /create route  -->
+      <form action="/create" method="post">
+        <div class="input-class">
+          <input class=" block w-full bg-gray-500 text-white py-1.5 rounded-2xl px-3.5 outline-none" type="text" placeholder="Title of Note" name="TaskTitle">
+        </div>
+
+        <div class="text-area-class">
+          <textarea class="text-area text-white bg-gray-500 block resize-none px-4 py-4 mt-3 w-full rounded-2xl outline-none" id="" placeholder="Write your  task detail here" name="detail"></textarea>
+        </div>
+
+        <div class="submitbtn flex justify-end mt-3.5 ">
+          <input class=" bg-amber-700 text-white w-[10rem] rounded-md" type="submit" value="create ">
+        </div>
+
+      </form>
+
+      <!-- tasks section here.. -->
+      <div class="tasks flex flex-wrap gap-4 mt-10  ">
+
+        <!-- /getting the files data from index.js file here -->
+        <% if(files.length > 0){ %>
+        <% files.forEach(element=> { %>
+        <div class=" task  max-w-80 px-2.5 py-3 rounded-md bg-gray-500 text-white ">
+          <h2 class="text-[14px] font-medium tracking-tight"><%=element %></h2>
+
+          <!-- // adding the filename path to read the file  -->
+          <a href="/taskfiles/<%= element %>" class="text-sky-500 inline-block mt-3">Read More.</a>
+
+          <a class="text-yellow-500 ml-2.5 pl-2 pr-2 px-1 py-1" href="/edit/<%= element %>"> Edit FileName</a>
+        </div>
+        <% }); %>
+        <%  } else { %>
+        <div class=" text-sky-50 ">
+          <h2 class="px-2 py-2">No Tesks Yet.</h2>
+        </div>
+        <% } %>
+
+        <!--         
+        <div class=" task hidden max-w-80 px-2.5 py-3 rounded-md bg-gray-500 text-white ">
+          <h2 class="text-2xl tracking-tight">Tasks here.. </h2>
+          <a href="" class="text-sky-500 inline-block mt-3">Read More.</a>
+        </div>
+        <div class=" task hidden max-w-80 px-2.5 py-3 rounded-md bg-gray-500 text-white ">
+          <h2 class="text-2xl tracking-tight">Tasks here.. </h2>
+          <a href="" class="text-sky-500 inline-block mt-3">Read More.</a>
+        </div>
+        <div class=" task hidden  max-w-80 px-2.5 py-3 rounded-md bg-gray-500 text-white ">
+          <h2 class="text-2xl tracking-tight">Tasks here.. </h2>
+          <a href="" class="text-sky-500 inline-block mt-3">Read More.</a>
+        </div> -->
+        <!-- <div class=" task hidden max-w-80 px-2.5 py-3 rounded-md bg-gray-500 text-white ">
+                         <h2 class="text-2xl tracking-tight">Tasks here.. </h2>
+                         <a href="" class="text-sky-500 inline-block mt-3">Read More.</a>
+                    </div> -->
+
+        <!-- first hamne sare tasks ko hidden kiya or yehh message print krvaya..  -->
+
+
+      </div>
+    </div>
+
+  </div>
+
+</body>
+
+</html>
