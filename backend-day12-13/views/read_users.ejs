@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="/styles/output.css">
+</head>
+
+<body>
+  <header class="w-full bg-sky-600 text-white h-[4rem] ">
+    <ul class="flex justify-end gap-10 pr-4 text-2xl  font-semibold pt-3">
+
+      <a href="/">
+        <li>Home</li>
+      </a>
+      <a href="/create">
+        <li>Add_Users</li>
+      </a>
+      <a href="/read_users">
+        <li>Read_Users</li>
+      </a>
+
+    </ul>
+
+  </header>
+
+  <div class="bg-slate-300 h-[150vh] ">
+    <h2 class="text-yellow-600 text-5xl font-semibold pl-10 pt-10 mb-10"> All Users</h2>
+
+    <div class="userscard flex gap-3 flex-wrap pl-5">
+
+      <% if (users.length > 0) { %>
+
+      <% users.forEach(users => { %>
+      <div class="user w-[20rem] h-[15rem] bg-zinc-400 p-6 rounded-lg pl-5  relative">
+
+        <div class="img ml-10 bg-zinc-600 w-[12rem] h-20 rounded-[18px] px-5 py-2 ">
+          <div class="pt-5 pl-15">🙎🏼‍♂️</div>
+        </div>
+
+        <div class=" username text-xl tracking-tighter font-semibold text-white mt-2 flex justify-center ">
+          <div class="">
+            <%=users.username %>
+          </div>
+        </div>
+
+        <div class="email text-blue-800 text-18 font-medium tracking-tighter  mt-2 flex justify-center">
+          <%=users.email %>
+        </div>
+
+        <section id="btn_s" class="flex justify-between gap-30 absolute bottom-0 mb-2">
+          <div class="editbtn ">
+            <button>
+              <a href="/edit/<%= users._id %>">Edit User</a>
+            </button>
+          </div>
+
+          <div class="deletebtn ">
+            <button class="text-red-700  hover:translate-y-[2px] hover:transition-all hover:font-bold ">
+              <a href="/delete/<%= users._id %>"> Delete User</a>
+            </button>
+          </div>
+
+        </section>
+
+      </div>
+
+      <% }); %>
+      <%  }  else { %>
+      <div class="text-stone-400 font-semibold text-3xl mt-3 pl-5">
+        <div> No Users.....</div>
+      </div>
+      <% } %>
+
+
+
+
+    </div>
+
+  </div>
+</body>
+
+</html>
