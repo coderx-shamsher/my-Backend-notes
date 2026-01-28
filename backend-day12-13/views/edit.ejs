@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/styles/output.css">
+</head>
+
+<body>
+    <header class="w-full bg-sky-800 text-white h-[4rem] ">
+        <ul class="flex justify-end gap-10 pr-4 text-2xl  font-semibold pt-3">
+            <a href="/">
+              <li>Home</li>
+            </a>
+            <a href="/create">
+                <li>Add_Users</li>
+            </a>
+            <a href="/read_users">
+                <li>Read_Users</li>
+            </a>
+
+        </ul>
+
+    </header>
+
+    <!-- form body coder  -->
+    <div class="form bg-slate-700 w-full h-100 flex">
+
+        <h2 class="text-3xl tracking-tighter text-amber-50 ml-10 pt-5"> Update User </h2>
+
+        <!-- // set the action /update/userid or set the user._id in ejs format  jis route pr data get krna hai method mein post keo k post method say he ham data ko send krte hain server tak  -->
+        <form action="/update/<%=user._id %>" method="post" class="p-10 relative ">
+            <!-- input username -->
+            <div class="username block ml-[12rem]  mt-3 border-2 border-yellow-700 w-[30vw] rounded-2xl">
+                <input class="text-stone-50 w-[23vw] outline-hidden px-5 py-2 " type="text" name="username" id="" required
+                    placeholder="Enter you username" value="<%= user.username %>">
+            </div>
+
+            <!-- password input -->
+            <div class=" password block ml-[12rem] mt-3 border-2 border-yellow-700 w-[30vw] rounded-2xl">
+                <input class=" text-stone-50 w-[23vw] outline-hidden px-5 py-2 " type="password" name="password" id=""
+                    placeholder="Enter your password " value="<%=user.password %>" required>
+            </div>
+
+            <!-- email input  -->
+            <div class=" password block ml-[12rem] mt-3 border-2 border-yellow-700 w-[30vw] rounded-2xl">
+                <input class="text-stone-50 w-[23vw] outline-hidden px-5 py-2 " type="email" name="email" id=""
+                    placeholder="Enter your email " required value="<%= user.email %>">
+            </div>
+
+            <!-- submit input -->
+            <div class="submit_input bg-yellow-500 rounded-2xl w-[11rem] hover:transition-all duration-100     hover:border-2 absolute left-82 mt-10">
+                <input class="px-10 py-2 hover:text-sky-600  " type="submit" value="Update User">
+            </div>
+
+        </form>
+    </div>
+
+</body>
+
+</html>
