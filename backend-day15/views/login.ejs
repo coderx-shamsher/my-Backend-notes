@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>backend-day15</title>
+    <link rel="stylesheet" href="/styles/src/output.css">
+</head>
+
+<body>
+    <header class="bg-yellow-500 text-black font-semibold h-10 pt-2">
+        <nav class="mr-6">
+            <ul class="flex gap-10 justify-end">
+                <a href="">
+                    <li>Home</li>
+                </a>
+                <a href="">
+                    <li>Read_User</li>
+                </a>
+                <a href="">
+                    <li>Create_user</li>
+                </a>
+                <a href="">
+                    <li>About</li>
+                </a>
+            </ul>
+        </nav>
+    </header>
+
+    <div id="Form_container" class="w-full h-screen bg-gray-200 pt-2">
+         <div class="pb-2">
+              <h2>Login Your Account</h2>
+         </div>
+
+        <form class="flex gap-5 flex-col justify-center items-center pt-5" method="post" action="/login">
+
+            <!-- email input  -->
+            <div class=" bg-sky-100 w-[20rem] border-2 border-zinc-600 rounded-2xl" id="email">
+                <input class="outline-none w-[20rem]  rounded-2xl px-5" placeholder="Enter Email" type="email" name="email" id="">
+            </div>
+            
+            <!-- password input -->
+            <div class=" bg-sky-100 w-[20rem] border-2 border-zinc-600 rounded-2xl" id="password">
+                <input class="outline-none w-[20rem] rounded-2xl px-5" placeholder="Enter Password" type="password" name="password" id="">
+            </div>
+     
+            <!-- submit btn  -->
+             <div class="subtn bg-sky-600 w-20 ">
+                  <button class="w-20 px-3 hover:cursor-pointer">login</button>
+             </div>
+        </form>
+    </div>
+</body>
+
+</html>
