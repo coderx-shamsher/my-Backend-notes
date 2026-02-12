@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mini_project_1st</title>
+    <link rel="stylesheet" href="/styles/src/output.css">
+</head>
+<body>
+       <div class="w-full min-h-screen bg-slate-600 text-white">
+              <!-- forms -->
+               <h2 class="pt-5 pl-5 text-2xl "> Create Account </h2>
+             <section class="w-[20rem] h-[22rem]  bg-zinc-400 ml-[12rem] rounded-3xl">
+                   <form action="/register" method="post" class="flex flex-col justify-center items-center">
+                         <!-- username input  -->
+                         <div class="pt-5 " id="user_name_input">
+                              <input class="px-3 py-3  border-2 border-b-amber-800 border-t-amber-500 border-l-black border-r-amber-200 outline-none rounded-2xl" type="text" name="username" id="" placeholder="Enter Your Username">
+                         </div>
+
+                         <!-- password input -->
+                          <div id="password_input" class="pt-5 ">
+                             <input class="px-3 py-3 border-2 border-b-amber-800 border-t-amber-500 border-l-black border-r-amber-200 outline-none rounded-2xl"  type="password" name="password" id="" placeholder="Enter Your password">
+                          </div>
+
+                          <!-- Email input -->
+                           <div id="email" class="pt-5  ">
+                               <input class="px-3 py-3 border-2 border-b-amber-800 border-t-amber-500 border-l-black border-r-amber-200 outline-none rounded-2xl"  type="email" name="email" id="" placeholder="Enter Your Email">
+                           </div>
+
+                           <!-- age input -->
+                            <div id="Age" class="pt-5 ">
+                                 <input class="px-3 py-3 border-2 border-b-amber-800 border-t-amber-500 border-l-black border-r-amber-200 outline-none rounded-2xl"  type="number" name="Age" id="" placeholder="Enter Your Age">
+                            </div>
+
+                            <!-- submit input  -->
+                             <div id="Submit_btn" class="mt-3 bg-amber-500 w-[8rem] rounded-3xl hover:translate-x-0.5 hover:translate-y-0.5">
+                                  <input class="px-4.5 py-2 hover:cursor-pointer" type="submit" value="Submit Form">
+                             </div>
+                     </form>
+             </section>
+       </div>
+</body>
+</html>
