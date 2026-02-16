@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/styles/src/output.css">
+</head>
+
+<body>
+    <header class="w-[54.3rem] pb-3.5 pt-3.5  bg-sky-700 flex justify-end gap-10 pr-5 list-none ">
+        <a href="/"
+            class=" bg-fuchsia-600  w-20 rounded-2xl px-[17px] transition-all hover:translate-1 duration-150 hover:font-semibold pt-1 pb-1">
+            <li>Home</li>
+        </a>
+        <a href="/login"
+            class="bg-fuchsia-600 w-20 pt-1 pb-1 rounded-2xl px-[19px] transition-all hover:translate-1 duration-150 hover:font-semibold ">
+            <li>Login</li>
+        </a>
+        <a href="/logout"
+            class="bg-fuchsia-600 w-20  rounded-2xl px-[14px] transition-all hover:translate-1 duration-150 hover:font-semibold pt-1 pb-1">
+            <li>Logout</li>
+        </a>
+    </header>
+
+
+    <div class="mt-4 font-bold text-2xl ml-12">
+        <h2>All Posts =></h2>
+    </div>
+    
+    <section id="all_posts" class="flex flex-wrap gap-1.5">
+      <% user.post.forEach(post=>{ %>
+        <div id="post_container">
+            <section class=" border-2 border-black rounded-[10px] font-medium w-[40vw] h-[60vh] mt-2 ml-4  bg-slate-900 relative">
+                <div class="post py-1.5  px-3">
+                    <h2 class="text-blue-400 font-bold "><%= user.username %></h2>
+                    <h2 class="text-blue-400 font-normal text-[13px] absolute bottom-0 right-2">@<%= user.email %></h2>
+                    <p class="tracking-tight text-amber-50 font-medium text-[15px] mt-1.5"><%= post.content %> </p>
+                </div>
+
+            </section>
+            <div id="btns" class="flex gap-12 mt-3 ml-[14rem]">
+                <div class="bg-red-600 w-10 rounded-md px-1.5 ">Like</div>
+                <div class="bg-sky-600 w-10 rounded-md px-1">Edit</div>
+            </div>
+        </div>
+        <% }) %>
+    </section>
+
+
+</body>
+
+</html>
