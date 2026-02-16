@@ -120,7 +120,10 @@ app.post("/login", async (req, res) => {
             // now lets set the token with cookie and lets send to the front end 
             res.cookie("token", token)
 
-            res.send("Welcome to profile sir.....")
+            // res.send("Welcome to profile sir.....")
+            // mai chaahta hu k login hone ke baad profile page pr redirect kr du
+            res.redirect("/profile")
+            // ager sab kuch theek hai to profile page pr redirect kr do 
          }
          else {
             // alert("Something is wrong....")
@@ -142,7 +145,8 @@ app.get("/logout", (req, res) => {
 // middleware for the protected routes
 function isloggedIn(req, res, next) {
    if (req.cookies.token === "") {
-      res.send("You need to login ......!!!......")
+      // res.send("You need to login ......!!!......")
+      res.redirect("/login")
    } else {
       let secretkey = "My_Secret_Key"
       let data = jwt.verify(req.cookies.token, secretkey)
@@ -155,9 +159,48 @@ function isloggedIn(req, res, next) {
 
 // profile route
 // add the middleware into your route jise bhi protected bana hai  
-app.get("/profile",isloggedIn,(req,res)=>{
-     console.log(req.user_data)
-     res.send("Welcome to your profile...")
+app.get("/profile",isloggedIn, async (req,res)=>{
+   //   res.send("Welcome to your profile...")
+   console.log(req.user_data)
+
+   // first hamne usemodel k method findOne say user ki find kiya hai 
+   let user = await usermodel.findOne({email:req.user_data.email})
+   // then use profile send kiya hai with the user data
+   
+   // now hame user ki post ki object id show ho rahi hogi now ham uski posts ko kaise show krvanye ? 
+   user.populate("post")
+   // now posts ko populate kiya hai  make sure 
+   res.render("profile",{user:user})
+
+})
+
+
+// to get or render the posts page....  
+app.get("/posts",isloggedIn,async (req,res)=>{
+   // now hame user ki post ki object id show ho rahi hogi now ham uski posts ko kaise show krvanye ? 
+   let user = await usermodel.findOne({email:req.user_data.email}).populate("post")
+   // posts ko populate kiya hai  make sure 
+   res.render("posts",{user})
+
+})
+
+// posts request handle on this route 
+app.post("/create_post",isloggedIn, async (req,res)=>{
+   // now ham us user koi he post create krne denge jo logged in hai or use hamne findOne kr liya hai 
+   let user = await usermodel.findOne({email:req.user_data.email})
+    
+   let {content} = req.body   
+   // now  postmodel ki help say ham post ko create krenge 
+   let post = await  postmodel.create({
+       // 1) check the post model schema and fill 
+       user: user._id,
+       content:content,
+   })
+   // now users k post mein push kro post id 
+   user.post.push(post._id)
+   // and save 
+   await user.save()
+   res.redirect("/profile")
 })
 
 app.listen(port, () => {
