@@ -423,3 +423,282 @@ make sure you check the working now , login kro , then see the response , then l
 >>> NOTE that's all about mini project1 practice today i done this date 12/2/26 thu 
 
 
+>>> Today part 2 of mini project 
+##  part 2 started now 
+
+### > create a new profile.ejs file and set this file to the render function 
+```html 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>mini_project_1st</title>
+  <link rel="stylesheet" href="/styles/src/output.css">
+</head>
+
+<body>
+  <div class="w-full min-h-screen bg-slate-600 text-white">
+    <!-- forms -->
+    <h2 class="pt-5 pl-5 text-2xl "> Profile </h2>
+
+    <section class="w-[20rem] h-[22rem]  bg-zinc-400 ml-[12rem] rounded-3xl mt-2.5">
+        <div class="flex flex-col justify-center items-center pt-8">
+            <h2 class="text-2xl">Welcome to your profile...</h2>
+        </div>
+
+    </section>
+
+  </div>
+
+</body>
+
+</html>
+```
+
+### > now lets add the profile page 
+```js 
+app.get("/profile",isloggedIn,(req,res)=>{
+     console.log(req.user_data)
+   //   res.send("Welcome to your profile...")
+   res.render("profile")
+
+})
+```
+### > also change the isloggedin function 
+
+```js 
+// res.send("You need to login ......!!!......")
+      res.redirect("/login")
+// redirect krna hai login route pr keo k ager ap logged in nhi ho to apko login krna pardega tabbi he profile show hogi.. 
+
+```
+
+
+### also change the login route and handle the login request 
+```js 
+
+// login post method 
+app.post("/login", async (req, res) => {
+   // first lets find the data of login form 
+
+   let { email, password } = req.body
+   // console.log(email)
+   // console.log(password)
+   console.log(req.body)
+   //  res.send("testing")
+
+   // checking ..... user hai bhi k nhi 
+   let user = await usermodel.findOne({ email })
+   if (!user) {
+      return res.status(500).send("Something is wrong.....")
+   }
+   else {
+      bcrypt.compare(password, user.password, function (error, result) {
+         if (result) {
+            // setup the cookie jwt token
+            let secretkey = "My_Secret_Key"
+            let token = jwt.sign({ email: email, userid: user._id }, secretkey)
+            // now lets set the token with cookie and lets send to the front end 
+            res.cookie("token", token)
+
+            // res.send("Welcome to profile sir.....")
+            // mai chaahta hu k login hone ke baad profile page pr redirect kr du
+            res.redirect("/profile")
+            // ager sab kuch theek hai to profile page pr redirect kr do 
+         }
+         else {
+            // alert("Something is wrong....")
+            res.redirect("/login")
+
+         }
+
+      })
+   }
+
+})
+
+```
+
+> now ager bin login k ham profile route pr janne ki kosis krte hain to hamne login route pr redirect kr diya jata hai... 
+
+> **main chaahta hun ki jo user logged in hai usi detail bhi show ho**
+```js 
+app.get("/profile",isloggedIn, async (req,res)=>{
+   //   res.send("Welcome to your profile...")
+   console.log(req.user_data)
+
+   // first hamne usemodel k method findOne say user ki find kiya hai 
+   let user = await usermodel.findOne({email:req.user_data.email})
+   // then use profile send kiya hai with the user data
+   res.render("profile",{user:user})
+
+})
+```
+###  *profile mein  yeh code add kro *
+```html 
+  <h2 class="pt-5 pl-5 text-2xl "> 
+        <span class="font-bold text-2xl text-yellow-500">Hello! 👋</span> 
+        <span class="font-mono  text-2xl text-sky-400">
+            <%= user.username %> 
+        </span>
+         </h2>
+```
+
+> now reload the profile !! 
+
+### maine profile page ko style kiya hai or yeh raha code 
+```html 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>mini_project_1st</title>
+  <link rel="stylesheet" href="/styles/src/output.css">
+</head>
+
+<body>
+  <div class="w-full min-h-screen bg-slate-600 text-white">
+
+    <header class="w-[54.3rem] pb-3.5 pt-3.5  bg-sky-700 flex justify-end gap-10 pr-5 list-none ">
+      <a href="/" class=" bg-fuchsia-600  w-20 rounded-2xl px-[17px] transition-all hover:translate-1 duration-150 hover:font-semibold pt-1 pb-1"> 
+        <li>Home</li>
+      </a>
+      <a href="/login" class="bg-fuchsia-600 w-20 pt-1 pb-1 rounded-2xl px-[19px] transition-all hover:translate-1 duration-150 hover:font-semibold ">
+        <li>Login</li>
+      </a>
+      <a href="/logout" class="bg-fuchsia-600 w-20  rounded-2xl px-[14px] transition-all hover:translate-1 duration-150 hover:font-semibold pt-1 pb-1">
+        <li>Logout</li>
+      </a>
+    </header>
+
+    <h2 class="pt-5 pl-5 text-2xl ">
+      <span class="font-bold text-2xl text-yellow-500">Hello! 👋</span>
+      <span class="font-mono  text-2xl text-sky-400">
+        <%= user.username %>
+      </span>
+    </h2>
+
+    <div class="mt-1.5 mb-1 text-amber-100 ml-8">
+      <p> You can create a new post. </p>
+    </div>
+
+    <section class="w-[35rem] h-[30rem]  ml-[8rem] rounded-3xl mt-2.5">
+
+      <form action="/create_post" class="relative">
+        <textarea class="resize-none w-[30rem] h-[12rem] bg-zinc-700 outline-none mt-6 ml-8 pt-1  rounded-[24px] px-5 "
+          name="content" id="" placeholder="Write what's on your mind ? "></textarea>
+
+        <!--submit the post -->
+        <input class="bg-emerald-700 w-[10rem] h-8 rounded-3xl ml-[21rem] " type="submit" value="Create New Post">
+
+      </form>
+
+      <div class="w-[10rem] h-[2rem] font-semibold  ml-10 bg-rose-600 flex justify-center items-center rounded-3xl absolute top-[23.50rem] ">
+             <a href="/posts">Your All Posts.</a>
+      </div>
+
+    </section>
+     
+     
+  </div>
+
+</body>
+
+</html>
+```
+
+##  create new file posts.ejs
+```html
+
+```
+##  posts route handle in server  
+```js route for posts
+// posts route handle 
+app.get("/posts",async (req,res)=>{
+   res.render("posts")
+})
+```
+## handle the post create route 
+jab post create hogi to us request ko handel kro 
+```js
+
+// posts request handle on this route 
+app.post("/create_post",isloggedIn, async (req,res)=>{
+   // now ham us user koi he post create krne denge jo logged in hai or use hamne findOne kr liya hai 
+   let user = await usermodel.findOne({email:req.user_data.email})
+    
+   let {content} = req.body   
+   // now  postmodel ki help say ham post ko create krenge 
+   let post = await  postmodel.create({
+       // 1) check the post model schema and fill 
+       user: user._id,
+       content:content,
+   })
+   // now users k post mein push kro post id 
+   user.post.push(post._id)
+   // and save 
+   await user.save()
+   res.redirect("/profile")
+})
+
+```
+
+## change the profile route with this code 
+```js 
+app.get("/profile",isloggedIn, async (req,res)=>{
+   //   res.send("Welcome to your profile...")
+   console.log(req.user_data)
+
+   // first hamne usemodel k method findOne say user ki find kiya hai 
+   let user = await usermodel.findOne({email:req.user_data.email})
+   // then use profile send kiya hai with the user data
+
+   res.render("profile",{user:user})
+
+})
+```
+
+## add this route or maybe update this code 
+```js 
+
+// to get or render the posts ejs  page....  
+app.get("/posts",isloggedIn,async (req,res)=>{
+   // now hame user ki post ki object id show ho rahi hogi now ham uski posts ko kaise show krvanye ? 
+   let user = await usermodel.findOne({email:req.user_data.email}).populate("post")
+   // posts ko populate kiya hai  make sure 
+   res.render("posts",{user})
+
+})
+```
+
+## this is new posts ejs code how to render real data and post content of our users 
+```html
+<!-- ager latest post upper show krni ho to use the reverse() method with foreach loop -->
+ <section id="all_posts" class="flex flex-wrap gap-1.5">
+  <!-- ager nhi to reverse() method ki hata dena  -->
+      <% user.post.reverse().forEach(post=>{ %>
+        <div id="post_container">
+            <section class=" border-2 border-black rounded-[10px] font-medium w-[40vw] h-[60vh] mt-2 ml-4  bg-slate-900 relative">
+                <div class="post py-1.5  px-3">
+                    <h2 class="text-blue-400 font-bold "><%= user.username %></h2>
+                    <h2 class="text-blue-400 font-normal text-[13px] absolute bottom-0 right-2">@<%= user.email %></h2>
+                    <p class="tracking-tight text-amber-50 font-medium text-[15px] mt-1.5"><%= post.content %> </p>
+                </div>
+
+            </section>
+            <div id="btns" class="flex gap-12 mt-3 ml-[14rem]">
+                <div class="bg-red-600 w-10 rounded-md px-1.5 ">Like</div>
+                <div class="bg-sky-600 w-10 rounded-md px-1">Edit</div>
+            </div>
+        </div>
+        <% }) %>
+    </section>
+
+```
+
+> now in part 2 hamne kuch features code kiye or notes create kiye.. in md that's all about today read the md file to see what i done today... 
+
