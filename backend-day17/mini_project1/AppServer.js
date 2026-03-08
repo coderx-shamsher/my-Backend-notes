@@ -1,6 +1,8 @@
 // express app 
 const express = require('express')
 
+const mongoose = require("mongoose")
+
 // user model and post model
 const usermodel = require("./Models/user")
 const postmodel = require('./Models/post')
@@ -13,6 +15,7 @@ const jwt = require("jsonwebtoken")
 
 // bcrypt 
 const bcrypt = require("bcrypt")
+const post = require('./Models/post')
 
 
 const app = express()
@@ -164,12 +167,10 @@ app.get("/profile",isloggedIn, async (req,res)=>{
    console.log(req.user_data)
 
    // first hamne usemodel k method findOne say user ki find kiya hai 
-   let user = await usermodel.findOne({email:req.user_data.email})
-   // then use profile send kiya hai with the user data
-   
-   // now hame user ki post ki object id show ho rahi hogi now ham uski posts ko kaise show krvanye ? 
-   user.populate("post")
    // now posts ko populate kiya hai  make sure 
+   let user = await usermodel.findOne({email:req.user_data.email}).populate("post") 
+   // then use profile send kiya hai with the user data
+   // now hame user ki post ki object id show ho rahi hogi now ham uski posts ko kaise show krvanye ? 
    res.render("profile",{user:user})
 
 })
@@ -183,6 +184,95 @@ app.get("/posts",isloggedIn,async (req,res)=>{
    res.render("posts",{user})
 
 })
+
+// to get or render the posts page....  
+// app.get("/like/:id",isloggedIn,async (req,res)=>{
+//    let post = await postmodel.findOne({id:req.params.id})
+//    // .populate("user")
+//    console.log(req.user_data.userid);
+//    console.log(req.user_data);
+
+//    if (post.likes.indexOf(req.user_data.userid) === -1 ) {
+     
+//        // push the user id into posts likes array 
+//        post.likes.push(req.user_data.userid)   
+//    }
+//    else{
+//        // removing the one like using the splice function
+//        post.likes.splice(post.likes.indexOf(req.user_data.userid),1)
+//    }
+//    // and save the post 
+//    await post.save()
+
+//    res.redirect("/posts")
+
+// })
+
+app.get("/like/:id", isloggedIn, async (req, res) => {
+   
+// console.log("🔍 FULL URL:", req.originalUrl);
+//   console.log("🔍 req.params.id:", req.params.id);
+//   console.log("🔍 req.params.id length:", req.params.id?.length);
+//   console.log("🔍 Is valid ObjectId?", mongoose.Types.ObjectId.isValid(req.params.id));
+
+  try {
+    // STEP 1: ✅ MongoDB _id use karo (NOT custom id field)
+    const post = await postmodel.findById(req.params.id);
+    
+    // STEP 2: ✅ Post exist karta hai ya nahi check karo
+    if (!post) {
+      console.log("❌ Post not found with ID:", req.params.id);
+      return res.status(404).json({ error: "Post not found" });
+    }
+    
+    console.log("✅ Post found:", post._id);
+    console.log("User ID:", req.user_data.userid);
+    
+    // STEP 3: ✅ User already liked hai ya nahi
+    const userId = req.user_data.userid;  // ObjectId ya string ensure karo
+    const userIndex = post.likes.indexOf(userId);
+    
+    if (userIndex === -1) {
+      // LIKE ADD
+      post.likes.push(userId);
+      console.log("👍 Like added");
+    } else {
+      // LIKE REMOVE
+      post.likes.splice(userIndex, 1);
+      console.log("👎 Like removed");
+    }
+    
+    // STEP 4: ✅ Save karo
+    await post.save();
+    console.log("✅ Post saved successfully");
+    
+    res.redirect("/posts");
+    
+  } catch (error) {
+    console.log("❌ ERROR:", error.message);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// render the edit page ham add kr rahen hain edit route jis ki help say first ham edit route ho get kr rahe hain using the get() method  
+app.get("/edit/:id",async  (req,res)=>{
+   let post = await postmodel.findOne({_id:req.params.id})
+   console.log(post)
+
+   // ham post object koi edit ejs file main as prop send kr rahe hain 
+   res.render("edit",{post})
+})
+
+// post route mein ham update handle kr rahe hain , edit post koi handle kr rahe hain.. 
+app.post("/update_post/:id", async(req,res)=>{
+    // lets find and update the post 
+    // first find kro jo ki main id param ki help se kia hai then kiya update kr rahe ho 
+    let post = await postmodel.findOneAndUpdate({_id:req.params.id} ,{content:req.body.content})
+    console.log()
+    console.log(post)
+    res.redirect("/posts")
+})
+
 
 // posts request handle on this route 
 app.post("/create_post",isloggedIn, async (req,res)=>{
