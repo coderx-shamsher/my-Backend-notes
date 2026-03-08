@@ -700,5 +700,190 @@ app.get("/posts",isloggedIn,async (req,res)=>{
 
 ```
 
-> now in part 2 hamne kuch features code kiye or notes create kiye.. in md that's all about today read the md file to see what i done today... 
+> part2 ended here..... 
+
+---
+## <--------- part 3 starting from here -------->
+> lets create like and edit feature .. lets code... 
+```html 
+
+  <section id="all_posts" class="flex flex-wrap gap-1.5">
+      <% user.post.forEach(post=>{ %>
+        <div id="post_container">
+            <section class=" border-2 border-black rounded-[10px] font-medium w-[40vw] h-[60vh] mt-2 ml-4  bg-slate-900 relative">
+                <div class="post py-1.5  px-3">
+                    <h2 class="text-blue-400 font-bold "><%= user.username %></h2>
+                    <h2 class="text-blue-400 font-normal text-[13px] absolute bottom-0 right-2">@<%= user.email %></h2>
+                    <p class="tracking-tight text-amber-50 font-medium text-[15px] mt-1.5"><%= post.content %> </p>
+                    <!-- this is the like number or kitne likes hai yeh like show kregi -->
+                    <small class="text-amber-50 absolute bottom-0"><%= post.likes.length %> likes</small>
+                </div>
+
+            </section>
+            <div id="btns" class="flex gap-12 mt-3 ml-[10rem]">
+                <div class=" w-10 rounded-md px-1.5 ">
+                    <u class="text-red-500">
+                     <!-- adding the route of like button tn ki ham like feature ki request ko handle kr sake  -->
+                        <a href="/like/<%= post._id %>">
+                          <!-- kb like show krna hai or kab unlke show krna hai -->
+                          <%= post.likes.indexOf(user._id) ===-1 ? "Like" :  "Unlike" %>          
+                        </a>
+                    </u> 
+                 </div>
+
+                <div class=" w-10 rounded-md px-1">
+                    <u class="text-sky-500">
+                        <a href="/edit/<%= post._id %>">Edit</a>
+
+                    </u>
+                 </div>
+            </div>
+
+        </div>
+        <% }) %>
+    </section>
+
+```
+1) first like feature ko handle krna hai then edit 
+
+```js 
+
+
+app.get("/like/:id", isloggedIn, async (req, res) => {
+   
+// console.log("🔍 FULL URL:", req.originalUrl);
+//   console.log("🔍 req.params.id:", req.params.id);
+//   console.log("🔍 req.params.id length:", req.params.id?.length);
+//   console.log("🔍 Is valid ObjectId?", mongoose.Types.ObjectId.isValid(req.params.id));
+
+  try {
+    // STEP 1: ✅ MongoDB _id use karo (NOT custom id field)
+    const post = await postmodel.findById(req.params.id);
+    
+    // STEP 2: ✅ Post exist karta hai ya nahi check karo
+    if (!post) {
+      console.log("❌ Post not found with ID:", req.params.id);
+      return res.status(404).json({ error: "Post not found" });
+    }
+    
+    console.log("✅ Post found:", post._id);
+    console.log("User ID:", req.user_data.userid);
+    
+    // STEP 3: ✅ User already liked hai ya nahi
+    const userId = req.user_data.userid;  // ObjectId ya string ensure karo
+    const userIndex = post.likes.indexOf(userId);
+    
+    if (userIndex === -1) {
+      // LIKE ADD
+      post.likes.push(userId);
+      console.log("👍 Like added");
+    } else {
+      // LIKE REMOVE
+      post.likes.splice(userIndex, 1);
+      console.log("👎 Like removed");
+    }
+    
+    // STEP 4: ✅ Save karo
+    await post.save();
+    console.log("✅ Post saved successfully");
+    
+    res.redirect("/posts");
+    
+  } catch (error) {
+    console.log("❌ ERROR:", error.message);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+```
+yeh ek error handling vala code hai jis mein error handling kri hai  
+
+## Edit feature ---> 
+* create edit.ejs file and style 
+```html 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mini_project_1st</title>
+    <link rel="stylesheet" href="/styles/src/output.css">
+</head>
+
+<body>
+    <div class="w-full min-h-screen bg-slate-600 text-white">
+
+        <header class="w-[54.3rem] pb-3.5 pt-3.5  bg-sky-700 flex justify-end gap-10 pr-5 list-none ">
+            <a href="/"
+                class=" bg-fuchsia-600  w-20 rounded-2xl px-[17px] transition-all hover:translate-1 duration-150 hover:font-semibold pt-1 pb-1">
+                <li>Home</li>
+            </a>
+            <a href="/login"
+                class="bg-fuchsia-600 w-20 pt-1 pb-1 rounded-2xl px-[19px] transition-all hover:translate-1 duration-150 hover:font-semibold ">
+                <li>Login</li>
+            </a>
+            <a href="/logout"
+                class="bg-fuchsia-600 w-20  rounded-2xl px-[14px] transition-all hover:translate-1 duration-150 hover:font-semibold pt-1 pb-1">
+                <li>Logout</li>
+            </a>
+            <a href="/posts"
+                class="bg-fuchsia-600 w-20  rounded-2xl px-[14px] transition-all hover:translate-1 duration-150 hover:font-semibold pt-1 pb-1">
+                <li>Posts</li>
+            </a>
+        </header>
+
+        <div class="mt-1.5 mb-1 text-amber-100 ml-8">
+            <p class="text-3xl ">Edit Your Post</p>
+        </div>
+
+        <section class="w-[35rem] h-[30rem]  ml-[8rem] rounded-3xl mt-2.5">
+        <!-- ham edit  post koi ek route de rahe jis mein ham post koi update kr sake..  -->
+            <form action="/update_post/<%= post._id %>" method="post" class="relative">
+                <textarea
+                    class="resize-none w-[20rem] h-[10rem] bg-zinc-700 outline-none mt-6 ml-8 pt-1  rounded-[24px] px-5 "
+                    name="content" id="" placeholder="Write what's on your mind ? "> <%=post.content %> </textarea>
+
+                <!--submit the post -->
+                <input class="bg-yellow-600 w-[10rem] h-8 rounded-3xl ml-[21rem] " type="submit" value="Update Post">
+
+            </form>
+        </section>
+    </div>
+
+</body>
+
+</html>
+```
+> this is the edit ejs code 
+
+**<----- now lets handle the edit request and other backend actions   ---->**
+
+```js
+// render the edit page ham add kr rahen hain edit route jis ki help say first ham edit route ho get kr rahe hain using the get() method  
+app.get("/edit/:id",async  (req,res)=>{
+   let post = await postmodel.findOne({_id:req.params.id})
+   console.log(post)
+
+   // ham post object koi edit ejs file main as prop send kr rahe hain 
+   res.render("edit",{post})
+})
+```
+
+**update post route handle here using the post method**
+```js
+
+// post route mein ham update handle kr rahe hain , edit post koi handle kr rahe hain.. 
+app.post("/update_post/:id", async(req,res)=>{
+    // lets find and update the post 
+    // first find kro jo ki main id param ki help se kia hai then kiya update kr rahe ho 
+    let post = await postmodel.findOneAndUpdate({_id:req.params.id} ,{content:req.body.content})
+    console.log()
+    console.log(post)
+    res.redirect("/posts")
+})
+```
+
+#### *that's all about today hamne like and edit feutue add kiya hai or readme update kiya...*
+
 
