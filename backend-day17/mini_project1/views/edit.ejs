@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mini_project_1st</title>
+    <link rel="stylesheet" href="/styles/src/output.css">
+</head>
+
+<body>
+    <div class="w-full min-h-screen bg-slate-600 text-white">
+
+        <header class="w-[54.3rem] pb-3.5 pt-3.5  bg-sky-700 flex justify-end gap-10 pr-5 list-none ">
+            <a href="/"
+                class=" bg-fuchsia-600  w-20 rounded-2xl px-[17px] transition-all hover:translate-1 duration-150 hover:font-semibold pt-1 pb-1">
+                <li>Home</li>
+            </a>
+            <a href="/login"
+                class="bg-fuchsia-600 w-20 pt-1 pb-1 rounded-2xl px-[19px] transition-all hover:translate-1 duration-150 hover:font-semibold ">
+                <li>Login</li>
+            </a>
+            <a href="/logout"
+                class="bg-fuchsia-600 w-20  rounded-2xl px-[14px] transition-all hover:translate-1 duration-150 hover:font-semibold pt-1 pb-1">
+                <li>Logout</li>
+            </a>
+            <a href="/posts"
+                class="bg-fuchsia-600 w-20  rounded-2xl px-[14px] transition-all hover:translate-1 duration-150 hover:font-semibold pt-1 pb-1">
+                <li>Posts</li>
+            </a>
+              <a href="/profile"
+                class="bg-fuchsia-600 w-20  rounded-2xl px-[14px] transition-all hover:translate-1 duration-150 hover:font-semibold pt-1 pb-1">
+                <li>Profile</li>
+            </a>
+        </header>
+
+        <div class="mt-1.5 mb-1 text-amber-100 ml-8">
+            <p class="text-3xl ">Edit Your Post</p>
+        </div>
+
+        <section class="w-[35rem] h-[30rem]  ml-[8rem] rounded-3xl mt-2.5">
+        <!-- ham edit  post koi ek route de rahe jis mein ham post koi update kr sake..  -->
+            <form action="/update_post/<%= post._id %>" method="post" class="relative">
+                <textarea
+                    class="resize-none w-[20rem] h-[10rem] bg-zinc-700 outline-none mt-6 ml-8 pt-1  rounded-[24px] px-5 "
+                    name="content" id="" placeholder="Write what's on your mind ? "> <%=post.content %> </textarea>
+
+                <!--submit the post -->
+                <input class="bg-yellow-600 w-[10rem] h-8 rounded-3xl ml-[21rem] " type="submit" value="Update Post">
+
+            </form>
+
+
+
+        </section>
+
+
+    </div>
+
+</body>
+
+</html>
