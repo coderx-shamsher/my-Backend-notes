@@ -1,12 +1,23 @@
 const mongoose = require("mongoose")
 
+// config package 
+const config = require("config")
+
+
+// require te debug 
+const dbgr = require("debug")("development:mongoose");
+
+
 mongoose
-.connect("mongodb://localhost:27017/eternity")
+.connect(`${config.get("MONGODB_URI")}/eternity`)
+// adding backtick to use te config with dynamic value 
+
 .then(function(){
-    console.log("Connected Done ")
+    dbgr("Connected Done")
+    
 })
 .catch(function(error){
-    console.log(error)
+    dbgr(error)
 })
 
 module.exports = mongoose.connection
