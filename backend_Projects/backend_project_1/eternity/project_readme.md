@@ -290,9 +290,25 @@ const admins_router = require("../routes/Admins_Router")
 const users_router = require("../routes/Users_Router")
 const products_router = require("../routes/Products_Router")
 
+
+// setup router using use() function
+
+// users route
+app.use("/users",user_router)
+
+// admins route
+app.use("/admins",Admin_router)
+
+// products route
+app.use("/products",product_router)
+
 ```
 
+
 >> Important now test these routes using postman api testing to make sure the working of these routers.. 
+
+##### --> create and test apis on these routes users,products,admins, in postman application.. 
+"Note --> start the server before the testing api in the postman..." 
 
 
 
