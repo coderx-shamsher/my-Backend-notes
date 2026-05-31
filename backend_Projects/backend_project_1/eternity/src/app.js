@@ -2,10 +2,13 @@ const express = require('express')
 const app = express()
 const port = 3040
 
+// require te mongoose connection 
+const mgdb = require("../config/mongoose-connection")
+
 // router require 
-const user_router = require("../routes/Users_Router")
-const Admin_router = require("../routes/Admins_Router")
-const  product_router = require("../routes/Products_Router")
+const User_Router = require("../routes/Users_Router")
+const Admin_Router = require("../routes/Admins_Router")
+const  Product_Router = require("../routes/Products_Router")
 
 // 
 const cookie_parser = require("cookie-parser")
@@ -24,13 +27,13 @@ app.use(express.static(path.join(__dirname,"public")))
 // setup router using use() function
 
 // users route
-app.use("/users",user_router)
+app.use("/users",User_Router)
 
 // admins route
-app.use("/admins",Admin_router)
+app.use("/admins",Admin_Router)
 
 // products route
-app.use("/products",product_router)
+app.use("/products",Product_Router)
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
