@@ -4,9 +4,9 @@ const mongoose = require("mongoose")
 
 const ProductSchema= mongoose.Schema({
     
-    ProductName: String,
-    Image : String,
-    Price: Number,
+    productname: String,
+    image : String,
+    price: Number,
     discount: {
         type:Number,
         default: 0

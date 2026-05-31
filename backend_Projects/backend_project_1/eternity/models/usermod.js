@@ -4,20 +4,20 @@ mongoose.connect("mongodb://localhost:27017/eternity")
 
 const userSchema= mongoose.Schema({
     
-    FullName: String,
-    Email: String,
-    Password:String,
-    Cart: {
+    fullname: String,
+    email: String,
+    password:String,
+    cart: {
         type:Array,
         default:[]
     },
     isAdmin: Boolean,
-    Orders: {
+    orders: {
         type:Array,
         default: []
     },
-    Contact_Number: Number,
-    Picture_of_user : String
+    contact_number: Number,
+    picture_of_user : String
 
 })
  
