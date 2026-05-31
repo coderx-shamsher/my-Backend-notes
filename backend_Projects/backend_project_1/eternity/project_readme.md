@@ -312,4 +312,221 @@ app.use("/products",product_router)
 
 
 
+--- 
+
+<!-- today 31-5-26 backend project part 4 development/production setup-->
+
+### -->>> install debug
+```sh
+
+npm install debug
+
+```
+
+--> setup into mongoose.connection.js
+
+```js 
+
+const mongoose = require("mongoose")
+
+// require te debug 
+const dbr = require("debug")("development:mongoose")
+
+mongoose
+.connect("mongodb://localhost:27017/eternity")
+.then(function(){
+    dbr("Connected Done ")
+})
+.catch(function(error){
+    dbr(error)
+})
+
+module.exports = mongoose.connection
+
+```
+" development ek enviroment setup kiya hai ... development ek enviroment hai merra : mongoose means mera message kahan say ayeega.. than hamne console.log ko dbr say replace kiya"
+" now let's start the server and see what happened... kuch bhi print nhhi hoga keoki hamne enviroment variable set nhi kiya...."
+
+#### how to setup the env variable for debug package, mongoose 
+**in bash terminal how to setup**
+> *Make sure to run this command into the terminal you have to run the server , jis terminal mein server file run hogo usi terminal main yeh commands run krna...*
+
+
+```zsh
+export NODE_ENV="development" DEBUG="development:*"
+```
+
+> to check the env variable 
+
+```sh
+ env | grep -E "NODE_ENV|DEBUG"
+
+```
+
+>> now start the server 
+
+--- 
+
+#### another method inline setup command to do  
+
+```zsh
+
+NODE_ENV=development DEBUG="development:*" nodemon ./src/app.js 
+
+# also you can do this without setup node env 
+DEBUG="development:*" nodemon ./src/app.js 
+
+# try kro jo bhi chal raha hai ...
+```
+
+--- 
+
+#### now create development.json file inside the config folder to setup the mongodb connection string dynamic and safe way 
+
+```JSON 
+
+{
+    "MONGODB_URI":"mongodb://localhost:27017"
+}
+
+```
+
+#### install config package 
+
+```sh 
+npm i config
+
+```
+
+> NOW update your mongoose connection file require config package and use it 
+
+```js mongoose-connection file
+
+const mongoose = require("mongoose")
+
+// config package 
+const config = require("config")
+
+
+// require te debug 
+const dbgr = require("debug")("development:mongoose");
+
+
+mongoose
+.connect(`${config.get("MONGODB_URI")}/eternity`)
+// adding backtick to use te config with dynamic value 
+
+.then(function(){
+    dbgr("Connected Done")
+    
+})
+.catch(function(error){
+    dbgr(error)
+})
+
+module.exports = mongoose.connection
+
+```
+*conig hamare enviroment k hisab se connection dynamically pic krta hai ager production hai to , ager development hai to*
+
+
+--- 
+
+### now lets create or setup models within routes 
+
+1) admin or owners whatever you have 
+```js 
+
+const express = require("express")
+
+// create router using express.Router()
+const router = express.Router()
+
+const admins_model = require("../models/admins_model")
+
+
+// api setup with router or check kro k res mil raha hai k nhi... 
+
+router.get("/", (req,res)=>{
+    res.send("helloo admin users......")
+})
+
+// condition for development evn only 
+// console.log(`\n NODE ENVIRONMENT ----> ${process.env.NODE_ENV} \n`)
+
+// ager development env hoga to he create route avaliable hoga... 
+if(process.env.NODE_ENV === "development"){
+    // console.log("its dev env....")
+    console.log(`\n NODE ENVIRONMENT ----> ${process.env.NODE_ENV} \n`)
+
+    // post method route for "/create" route
+    router.post("/create",(req,res)=>{
+    res.send("its create")
+   })
+
+   
+}
+
+module.exports = router
+
+```
+> test the api within the postmen change the method and test test /create route jo hamne create krah hai..
+
+##### NOTE -->  now ager main mera node_env change krde to.... let say production 
+```sh 
+
+export NODE_ENV=production
+
+## now run you app server..
+
+nodemon your_server_filename
+
+```
+**this is how we do environment based development or routing, esmain ham /create route sirf development phase mein he provide kr rahe hain... **
+
+> or yeh check krne k bad let do some work into admins route file
+1) lets check k koi admin user hai to nhi ager hai to new admin user create nhi hoga... 
+```js 
+
+// ager development env hoga to he create route avaliable hoga... 
+if (process.env.NODE_ENV === "development") {
+    // console.log("its dev env....")
+    console.log(`\n NODE ENVIRONMENT ----> ${process.env.NODE_ENV} \n`)
+
+    // post method route for "/create" route
+    router.post("/create", async (req, res) => {
+        //   res.send("its create")
+        let isadmin = await admins_model.find()
+
+        // ager koi bhi admin user hai to new create krne ki permission nhi hogi...
+        if (isadmin.length > 0) {
+            return res
+                .status(503)
+                .send("You don't have permission to create new admin...")
+        }
+        
+        // ager koi admin nhi hai to create 
+      // req object deconstruction 
+      let { fullname , password , email} = req.body
+
+        // creating admin user 
+       let created_admin =  await admins_model.create({
+             fullname,
+             email,
+             password,
+        })
+ 
+        // print the create admin user 
+        res.status(201).send(created_admin)
+    })  
+
+}
+
+```
+
+>> create admin into postmen api 
+>> NOTE ---> in the post body mein api test admin data file krna not into params make sure to keep in mind..
+
+<!-- thats all for today....... -->
+---- 
 
